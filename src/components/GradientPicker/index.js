@@ -47,7 +47,8 @@ const GradientPicker = ({
 	palette = mapIdToPalette(palette);
 
 	const [defaultActiveColor] = palette;
-	const [activeColorId, setActiveColorId] = useState(defaultActiveColor.id);
+	// const [activeColorId, setActiveColorId] = useState(defaultActiveColor.id);
+	const [activeColorId, setActiveColorId] = useState(null);
 
 	const limits = useMemo(() => {
 		const min = -HALF_STOP_WIDTH;
@@ -59,7 +60,7 @@ const GradientPicker = ({
 	const handleColorAdd = ({ offset }) => {
 		if (palette.length >= maxStops) return;
 
-		const { color } = getPaletteColor(palette, activeColorId);
+		const { color } = getPaletteColor(palette, activeColorId || defaultActiveColor.id);
 		const entry = { id: nextColorId(palette), offset: offset / width, color };
 
 		const updatedPalette = [...palette, entry];
@@ -72,14 +73,14 @@ const GradientPicker = ({
 		if (palette.length <= minStops) return;
 
 		const updatedPalette = palette.filter(c => c.id !== id);
-		const activeId = updatedPalette.reduce((a, x) => x.offset < a.offset ? x : a, updatedPalette[0]).id;
+		const activeId = updatedPalette.reduce((a, x) => x.offset < a.offset ? x : a, {id: null}).id;
 
-		setActiveColorId(activeId);
+		setActiveColorId(activeId); //id === activeColorId && 
 		handlePaletteChange(updatedPalette);
 	};
 
 	const onStopDragStart = (id) => {
-		setActiveColorId(id);
+		setActiveColorId(id === activeColorId ? null: id);
 	};
 
 	const handleColorSelect = (color, opacity = 1) => {
@@ -146,7 +147,7 @@ const GradientPicker = ({
 				onDeleteColor={handleColorDelete}
 				onDragStart={onStopDragStart}
 			/>
-			{colorPicker()}
+			{activeColorId && colorPicker()}
 		</div>
 	);
 };

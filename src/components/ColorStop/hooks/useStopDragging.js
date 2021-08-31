@@ -10,24 +10,12 @@ import useDragging from '../../hooks/useDragging';
  */
 const limitPos = (offset, min, max) => Math.max(Math.min(offset, max), min);
 
-const getColorStopRefTop = (ref) => {
-	if (!ref.current) return 0;
-	return ref.current.getBoundingClientRect().top;
-};
-
-const useStopDragging = ({ limits, stop, initialPos, colorStopRef, onPosChange, onDragStart, onDragEnd, onDeleteColor}) => {
+const useStopDragging = ({ limits, stop, initialPos, onPosChange, onDragStart, onDragEnd}) => {
 	const [posStart, setPosStart] = useState(initialPos);
 
-	const handleDrag = ({ clientX, clientY }) => {
+	const handleDrag = ({ clientX }) => {
 		const { id, offset } = stop;
 		const { min, max } = limits;
-
-		// Removing if out of drop limit on Y axis.
-		const top = getColorStopRefTop(colorStopRef);
-		if (Math.abs(clientY - top) > limits.drop) {
-			//deactivate();
-			return onDeleteColor(id);
-		}
 
 		// Limit movements
 		const dragOffset = offset - posStart;

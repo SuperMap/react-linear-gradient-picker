@@ -1,0 +1,1 @@
+declare module '@ispeco/react-linear-gradient-picker';

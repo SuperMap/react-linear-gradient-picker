@@ -1,29 +1,22 @@
 {
-  "name": "react-linear-gradient-picker",
-  "version": "1.1.4",
+  "name": "@ispeco/react-linear-gradient-picker",
+  "version": "1.0.7",
   "description": "React linear gradient picker",
   "main": "dist/index.js",
   "scripts": {
     "storybook": "start-storybook -p 7006",
     "lint": "eslint .",
     "build": "webpack --config ./webpack.config.js",
-    "deploy-storybook": "storybook-to-ghpages"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/odedglas/react-linear-gradient-picker"
+    "deploy-storybook": "storybook-to-ghpages",
+    "build:publish": "npm run build && npm publish"
   },
   "keywords": [
     "gradient-picker",
     "linear-gradient",
     "svg"
   ],
-  "author": "Oded Goldglas <odedglas@gmail.com>",
+  "author": "SuperMap_FV",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/odedglas/react-linear-gradient-picker/issues"
-  },
-  "homepage": "https://github.com/odedglas/react-linear-gradient-picker#readme",
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@babel/plugin-transform-runtime": "^7.6.0",

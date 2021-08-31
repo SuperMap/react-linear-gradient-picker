@@ -22,7 +22,8 @@ const UseCase = ({ palette, ColorPicker, link, title }) => {
 					width: 320,
 					paletteHeight: 32,
 					palette: localPalette,
-					onPaletteChange: setLocalPalette
+					onPaletteChange: setLocalPalette,
+					maxStops: 8
 				}}>
 					{ ColorPicker ? <ColorPicker/> : null }
 				</GradientPicker>
