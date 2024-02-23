@@ -4,7 +4,7 @@ import { STOP_PROP_TYPES } from '../propTypes';
 import useStopDragging from './hooks/useStopDragging';
 import './index.css';
 
-const ColorStop = ({ stop, limits, onPosChange, onDeleteColor, onDragStart = noop, onDragEnd = noop}) => {
+const ColorStop = ({ stop, limits, onPosChange, onDragStart = noop, onDragEnd = noop, onClick}) => {
 	const [drag] = useStopDragging({
 		stop,
 		limits,
@@ -16,15 +16,11 @@ const ColorStop = ({ stop, limits, onPosChange, onDeleteColor, onDragStart = noo
 	const { offset, color, isActive } = stop;
 
 	return (
-		<div className={isActive ? 'cs active' : 'cs'} style={{ left: offset }}>
+		<div onClick={onClick} className={isActive ? 'cs active' : 'cs'} style={{ left: offset }}>
 			<div className="arrow"></div>
 			<div className="content" style={{ backgroundColor: color }}
 				onMouseDown={drag}
 				onTouchStart={drag}/>
-			<div className="delete" onMouseDown={(evt) => {
-				evt.stopPropagation();
-				onDeleteColor(stop.id);
-			}}>x</div>
 		</div>
 	);
 };

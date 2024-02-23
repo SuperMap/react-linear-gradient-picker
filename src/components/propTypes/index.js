@@ -25,7 +25,6 @@ export const STOP_PROP_TYPES = {
 	stop: STOP_SHAPE.isRequired,
 	limits: LIMITS_SHAPE.isRequired,
 	onPosChange: func.isRequired,
-	onDeleteColor: func.isRequired,
 	onDragStart: func,
 	onDragEnd: func
 };
@@ -37,7 +36,6 @@ export const STOPS_HOLDER_PROP_TYPES = {
 	disabled: bool,
 	onPosChange: func.isRequired,
 	onAddColor: func.isRequired,
-	onDeleteColor: func.isRequired,
 	onDragStart: func,
 	onDragEnd: func,
 };

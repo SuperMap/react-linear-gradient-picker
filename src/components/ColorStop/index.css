@@ -25,17 +25,3 @@
 .cs.active .arrow {
     border-bottom: 4px solid #3499E5;
 }
-
-.delete {
-    display: none;
-    font-size: 12px;
-    text-align: center;
-}
-
-.delete:hover {
-    color: #5eb7f2;
-}
-
-.cs:hover .delete {
-    display: block;
-}

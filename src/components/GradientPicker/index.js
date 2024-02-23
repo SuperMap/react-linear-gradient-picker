@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import classNames from 'classnames';
 import ColorStopsHolder from '../ColorStopsHolder/index';
 import Palette from '../Palette/index';
 import ColorPicker from '../ColorPicker/index';
@@ -42,13 +43,15 @@ const GradientPicker = ({
 	maxStops = DEFAULT_MAX_STOPS,
 	children,
 	flatStyle = false,
-	onPaletteChange
+	onPaletteChange,
+	deleteIcon
 }) => {
 	palette = mapIdToPalette(palette);
 
 	const [defaultActiveColor] = palette;
 	// const [activeColorId, setActiveColorId] = useState(defaultActiveColor.id);
 	const [activeColorId, setActiveColorId] = useState(null);
+	const [showColorPicker, setShowColorPicker] = useState(false);
 
 	const limits = useMemo(() => {
 		const min = -HALF_STOP_WIDTH;
@@ -129,25 +132,60 @@ const GradientPicker = ({
 
 	const paletteWidth = width - HALF_STOP_WIDTH;
 	const stopsHolderDisabled = palette.length >= maxStops;
+	const stops = mapPaletteToStops({
+		palette,
+		width: paletteWidth,
+		activeId: activeColorId
+	});
+
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+			const picker = document.querySelector('.picker');
+			const csh = document.querySelector('.csh');
+			const cs = document.querySelector('.cs');
+			const deleteBtn = document.querySelector('.delete');
+
+			const target = event.target;
+			if (picker && !picker.contains(target) && !csh.contains(target)) {
+				!cs.contains(target) && setShowColorPicker(false);
+				!deleteBtn.contains(target) && setActiveColorId(null);
+			}
+		};
+
+		document.addEventListener('mousedown', handleClickOutside);
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, []);
+
+	const handleGradientPickerClick = () => {
+		setShowColorPicker(true);
+	};
 
 	return (
 		<div className="gp">
-			<Palette width={paletteWidth} height={paletteHeight} palette={palette}/>
+			<div className='palette-content'>
+				<Palette width={paletteWidth} height={paletteHeight} palette={palette}/>
+				<span className={classNames('delete', {
+					'disable': !activeColorId || palette.length === 2
+				})} onClick={()=>{
+					handleColorDelete(activeColorId);
+				}}>
+					{deleteIcon ? deleteIcon : <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="200" height="200"><path d="M892.032 244.992h-136.064V161.536c0-36.672-31.424-66.56-70.08-66.56H338.112c-38.656 0-70.144 29.888-70.144 66.56v83.456H132.032a8 8 0 0 0-7.936 8v56c0 4.48 3.52 8 8 8h35.776l27.712 547.392c1.792 36.224 32.192 64.64 69.12 64.64h494.72c36.928 0 67.328-28.416 69.12-64.64l27.712-547.392h35.84a8 8 0 0 0 7.936-8v-56a8 8 0 0 0-7.936-8zM339.968 167.04h344v78.08H340.096v-78.08z m416.832 690.048h-489.6l-27.328-540.032h544.256l-27.328 540.032zM401.92 412.992h48c5.376 0 8 2.688 8 8v286.016c0 5.312-2.624 8-8 8h-48c-5.312 0-8-2.688-8-8V420.992c0-5.312 2.688-8 8-8z m171.008 0h48c5.312 0 8 2.688 8 8v286.016c0 5.312-2.688 8-8 8h-48c-5.312 0-8-2.688-8-8V420.992c0-5.312 2.688-8 8-8z"></path></svg>}
+				</span>
+			</div>
 			<ColorStopsHolder
 				width={paletteWidth}
 				disabled={stopsHolderDisabled}
-				stops={mapPaletteToStops({
-					palette,
-					width: paletteWidth,
-					activeId: activeColorId
-				})}
+				stops={stops}
 				limits={limits}
 				onPosChange={handleStopPosChange}
 				onAddColor={handleColorAdd}
-				onDeleteColor={handleColorDelete}
 				onDragStart={onStopDragStart}
+				onClick={handleGradientPickerClick}
 			/>
-			{activeColorId && colorPicker()}
+			{activeColorId && showColorPicker && <div className='picker'>{colorPicker()}</div>}
 		</div>
 	);
 };
