@@ -60,11 +60,13 @@ const GradientPicker = ({
 		return { min, max, drop: stopRemovalDrop };
 	}, [width]);
 
+	const paletteWidth = width - HALF_STOP_WIDTH;
+
 	const handleColorAdd = ({ offset }) => {
 		if (palette.length >= maxStops) return;
 
 		const { color } = getPaletteColor(palette, activeColorId || defaultActiveColor.id);
-		const entry = { id: nextColorId(palette), offset: offset / width, color };
+		const entry = { id: nextColorId(palette), offset: offset / paletteWidth, color };
 
 		const updatedPalette = [...palette, entry];
 
@@ -130,7 +132,6 @@ const GradientPicker = ({
 		return React.cloneElement(child, props);
 	};
 
-	const paletteWidth = width - HALF_STOP_WIDTH;
 	const stopsHolderDisabled = palette.length >= maxStops;
 	const stops = mapPaletteToStops({
 		palette,
